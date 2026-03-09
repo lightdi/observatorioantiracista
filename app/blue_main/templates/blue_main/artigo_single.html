@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ artigo.titulo }} - Artigos OPA{% endblock %}
+
+{% block content %}
+<section class="py-5 min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.index') }}"
+                                class="text-decoration-none">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.artigos') }}"
+                                class="text-decoration-none">Artigos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ artigo.titulo[:30] }}...</li>
+                    </ol>
+                </nav>
+
+                <article>
+                    <h1 class="fw-bold mb-3 lh-sm">{{ artigo.titulo }}</h1>
+
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom text-muted">
+                        <i class="bi bi-person-circle fs-4 me-2"></i>
+                        <div>
+                            <div class="fw-bold text-dark">{{ artigo.autor_nome }}</div>
+                            <div class="small">Publicado em {{ artigo.created_at.strftime('%d de %B, %Y') }}</div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="lead fw-medium text-secondary mb-4 border-start border-4 border-primary ps-3 bg-light p-3 fs-5 rounded-end">
+                        {{ artigo.resumo }}
+                    </div>
+
+                    <div class="article-content fs-5 lh-lg text-dark">
+                        {{ artigo.conteudo|safe }}
+                    </div>
+                    {% set comentarios = artigo.comentarios %}
+                    {% set tipo = "artigo" %}
+                    {% set item_id = artigo.id %}
+                    {% include 'blue_main/_comentarios.html' %}
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

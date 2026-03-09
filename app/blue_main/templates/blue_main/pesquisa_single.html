@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pesquisa.titulo }} - Pesquisa OPA{% endblock %}
+
+{% block content %}
+<section class="py-5 min-vh-100 bg-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.index') }}"
+                                class="text-decoration-none">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.pesquisas') }}"
+                                class="text-decoration-none text-success">Pesquisas</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ pesquisa.titulo[:30] }}...</li>
+                    </ol>
+                </nav>
+
+                <article>
+                    <div class="badge bg-success mb-3 px-3 py-2 text-uppercase fw-bold rounded-pill">Pesquisa Científica
+                    </div>
+                    <h1 class="fw-bold mb-3 lh-sm text-dark">{{ pesquisa.titulo }}</h1>
+
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom text-muted">
+                        <i class="bi bi-mortarboard fs-4 me-2 text-success"></i>
+                        <div>
+                            <div class="fw-bold text-dark">{{ pesquisa.autores }}</div>
+                            <div class="small">Divulgado em {{ pesquisa.created_at.strftime('%d de %B, %Y') }}</div>
+                        </div>
+                    </div>
+
+                    <h4 class="fw-bold mb-3 text-dark">Resumo / Descrição</h4>
+                    <div class="article-content fs-5 lh-lg text-secondary">
+                        {{ pesquisa.descricao|safe }}
+                    </div>
+
+                    {% set comentarios = pesquisa.comentarios %}
+                    {% set tipo = "pesquisa" %}
+                    {% set item_id = pesquisa.id %}
+                    {% include 'blue_main/_comentarios.html' %}
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

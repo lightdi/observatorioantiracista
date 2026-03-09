@@ -1,0 +1,75 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gerenciar Práticas Antirracistas</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('blue_admin.nova_pratica') }}" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg"></i> Nova Prática
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm align-middle">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Escola/Instituição</th>
+                <th>Categoria</th>
+                <th>Endereço</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pratica in pagination.items %}
+            <tr>
+                <td>{{ pratica.titulo }}
+                    <br>
+                    <small class="text-muted">Anexos: {{ pratica.anexos.count() }}</small>
+                </td>
+                <td>{{ pratica.escola.nome }}</td>
+                <td><span class="badge bg-secondary">{{ pratica.categoria_nome }}</span></td>
+                <td>{{ pratica.endereco or '-' }}</td>
+                <td class="text-end">
+                    <a href="{{ url_for('blue_admin.editar_pratica', id=pratica.id) }}"
+                        class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <form action="{{ url_for('blue_admin.excluir_pratica', id=pratica.id) }}" method="post"
+                        class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('Deseja realmente excluir esta prática permanentemente?')">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Ainda não há práticas cadastradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if pagination.pages > 1 %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('blue_admin.praticas', page=pagination.prev_num) }}">Anterior</a>
+            </li>
+            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if page_num %}
+            <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('blue_admin.praticas', page=page_num) }}">{{ page_num }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('blue_admin.praticas', page=pagination.next_num) }}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

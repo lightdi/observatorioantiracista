@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pratica.titulo }} - OPA Observatório{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-white min-vh-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 border-end pe-lg-5">
+
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.index') }}"
+                                class="text-decoration-none">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.praticas') }}"
+                                class="text-decoration-none text-primary">Observatório</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ pratica.titulo[:30] }}...</li>
+                    </ol>
+                </nav>
+
+                <header class="mb-4 pb-4 border-bottom">
+                    <div class="badge bg-primary text-white mb-3 px-3 py-2 fw-bold rounded-pill text-uppercase">{{
+                        pratica.categoria_nome }}</div>
+                    <h1 class="fw-bold text-dark display-6 mb-3">{{ pratica.titulo }}</h1>
+                    <p class="text-muted fs-5 mb-0"><i class="bi bi-building me-2"></i><strong>Instituição:</strong> {{
+                        pratica.escola.nome }}</p>
+                </header>
+
+                <article class="article-content fs-5 lh-lg text-secondary mb-5">
+                    {{ pratica.descricao|safe }}
+                    {% set comentarios = pratica.comentarios %}
+                    {% set tipo = "pratica" %}
+                    {% set item_id = pratica.id %}
+                    {% include 'blue_main/_comentarios.html' %}
+                </article>
+            </div>
+
+            <div class="col-lg-4 ps-lg-5 mt-5 mt-lg-0">
+                <h5 class="fw-bold text-dark border-bottom pb-2 mb-4">Informações da Iniciativa</h5>
+
+                <ul class="list-unstyled text-muted mb-5">
+                    <li class="mb-3 d-flex"><i class="bi bi-geo-alt fs-5 text-primary me-3"></i>
+                        <div>
+                            <strong>Localização:</strong><br>
+                            {{ pratica.endereco or 'Não Informado' }}<br>
+                            {{ pratica.escola.cidade or '-' }} - {{ pratica.escola.estado or '-' }}
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex"><i class="bi bi-calendar-check fs-5 text-primary me-3"></i>
+                        <div>
+                            <strong>Registro Portal:</strong><br>
+                            {{ pratica.created_at.strftime('%d/%m/%Y') }}
+                        </div>
+                    </li>
+                </ul>
+
+                {% if pratica.anexos.count() > 0 %}
+                <div class="card border-0 bg-light rounded-4 p-4 mt-4">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-paperclip me-2"></i>Materiais e Anexos</h6>
+                    <ul class="list-unstyled mb-0">
+                        {% for a in pratica.anexos %}
+                        <li class="mb-2">
+                            <a href="{{ url_for('static', filename=a.caminho_arquivo) }}"
+                                class="text-decoration-none text-primary fw-medium" target="_blank">
+                                <i class="bi bi-download me-1"></i> {{ a.nome_arquivo }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

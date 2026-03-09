@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Denunciar - OPA{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Denúncia online</h1>
+  <p class="lead">Registre sua denúncia. Os campos nome e e-mail são opcionais (denúncia anônima).</p>
+  <div class="row">
+    <div class="col-lg-8">
+      <form method="post" action="{{ url_for('blue_main.denunciar') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Opcional">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Endereço e-mail</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Opcional">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="local_ocorrencia" class="form-label">Local do Ocorrido</label>
+            <input type="text" class="form-control" id="local_ocorrencia" name="local_ocorrencia"
+              placeholder="Escola, rua, cidade... (Opcional)">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="data_aproximada" class="form-label">Data Aproximada</label>
+            <input type="text" class="form-control" id="data_aproximada" name="data_aproximada"
+              placeholder="Ex: Ontem, 15/04/2026... (Opcional)">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="conteudo" class="form-label">Sua denúncia <span class="text-danger">*</span></label>
+          <textarea class="form-control" id="conteudo" name="conteudo" rows="6" required
+            placeholder="Descreva o ocorrido..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Enviar denúncia</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

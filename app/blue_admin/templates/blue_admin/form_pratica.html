@@ -1,0 +1,97 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{% if pratica %}Editar Prática{% else %}Nova Prática{% endif %}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('blue_admin.praticas') }}" class="btn btn-sm btn-outline-secondary">
+            Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.titulo.label(class="form-label") }}
+                        {{ form.titulo(class="form-control") }}
+                        {% for error in form.titulo.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.escola_id.label(class="form-label") }}
+                            {{ form.escola_id(class="form-select") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.categoria_slug.label(class="form-label") }}
+                            {{ form.categoria_slug(class="form-select") }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.descricao.label(class="form-label") }}
+                        {{ form.descricao(class="form-control", rows=4) }}
+                        <small class="text-muted">Descreva a iniciativa ou projeto.</small>
+                    </div>
+                    <hr>
+                    <h5 class="mb-3">Localização (Mapa)</h5>
+                    <div class="mb-3">
+                        {{ form.endereco.label(class="form-label") }}
+                        {{ form.endereco(class="form-control", placeholder="Endereço da escola/prática") }}
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.latitude.label(class="form-label") }}
+                            {{ form.latitude(class="form-control", placeholder="Ex: -23.5505") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.longitude.label(class="form-label") }}
+                            {{ form.longitude(class="form-control", placeholder="Ex: -46.6333") }}
+                        </div>
+                    </div>
+                    <p class="small text-muted mb-4">Preencha latitude e longitude para que a prática apareça no mapa
+                        público. Utilize um site como latlong.net, ou preencha o endereço.</p>
+                    <hr>
+                    <h5 class="mb-3">Anexos de Documentação</h5>
+                    <div class="mb-4">
+                        {{ form.anexos.label(class="form-label") }}
+                        {{ form.anexos(class="form-control") }}
+                        <small class="text-muted">Selecione um ou mais arquivos (PDF, DOCX, ou Fotos).</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-2">Salvar Prática</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- Exibição de anexos existentes (apenas em caso de edição) -->
+        {% if pratica and pratica.anexos.count() > 0 %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">Arquivos Anexados</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for anexo in pratica.anexos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('static', filename=anexo.caminho_arquivo) }}" target="_blank"
+                        class="text-truncate" style="max-width: 200px;" title="{{ anexo.nome_arquivo }}">
+                        <i class="bi bi-paperclip"></i> {{ anexo.nome_arquivo }}
+                    </a>
+                    <a href="{{ url_for('blue_admin.excluir_anexo', id=anexo.id) }}"
+                        class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Deseja excluir permanentemente este anexo?')"><i
+                            class="bi bi-trash"></i></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "admin_base.html" %}
+{% from '_macros.html' import render_pagination %}
+{% block title %}Denúncias - OPA Admin{% endblock %}
+{% block content %}
+<h1>Denúncias</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Data</th>
+      <th>Nome/E-mail</th>
+      <th>Local/Data</th>
+      <th>Conteúdo</th>
+      <th>Status</th>
+      <th>Ação</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in pagination.items %}
+    <tr>
+      <td>{{ d.id }}</td>
+      <td>{{ d.created_at.strftime('%d/%m/%Y %H:%M') if d.created_at else '-' }}</td>
+      <td>{{ d.nome or '-' }} / {{ d.email or 'Anônimo' }}</td>
+      <td>
+        <div class="small fw-bold">{{ d.local_ocorrencia or 'Não Info' }}</div>
+        <div class="small text-muted">{{ d.data_aproximada or 'Não Info' }}</div>
+      </td>
+      <td>{{ d.conteudo[:100] }}…</td>
+      <td><span class="badge bg-secondary">{{ d.status }}</span></td>
+      <td>
+        <form method="post" action="{{ url_for('blue_admin.alterar_status_denuncia', denuncia_id=d.id) }}"
+          class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <select name="status" class="form-select form-select-sm d-inline-block w-auto">
+            <option value="recebida" {% if d.status=='recebida' %}selected{% endif %}>Recebida</option>
+            <option value="em_analise" {% if d.status=='em_analise' %}selected{% endif %}>Em análise</option>
+            <option value="concluida" {% if d.status=='concluida' %}selected{% endif %}>Concluída</option>
+          </select>
+          <button type="submit" class="btn btn-sm btn-outline-primary">Atualizar</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6" class="text-muted">Nenhuma denúncia.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{{ render_pagination(pagination, 'blue_admin.denuncias') }}
+{% endblock %}

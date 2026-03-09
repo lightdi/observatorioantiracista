@@ -1,0 +1,21 @@
+{% extends "admin_base.html" %}
+{% from '_macros.html' import render_field %}
+{% block title %}{{ 'Editar post' if post else 'Novo post' }} - OPA Admin{% endblock %}
+{% block content %}
+<h1>{{ 'Editar post' if post else 'Novo post' }}</h1>
+<form method="post" action="{{ url_for('blue_admin.editar_post', post_id=post.id) if post else url_for('blue_admin.novo_post') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {{ render_field(form.titulo) }}
+  {{ render_field(form.slug) }}
+  {{ render_field(form.categoria_slug) }}
+  {{ render_field(form.resumo) }}
+  {{ render_field(form.imagem_url) }}
+  {{ render_field(form.conteudo) }}
+  <div class="mb-3 form-check">
+    {{ form.publicado(class="form-check-input") }}
+    {{ form.publicado.label(class="form-check-label") }}
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('blue_admin.posts') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

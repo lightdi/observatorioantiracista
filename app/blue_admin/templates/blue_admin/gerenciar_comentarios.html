@@ -1,0 +1,92 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Comentários - OPA Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 fw-bold text-dark">Moderação de Comentários</h1>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('blue_admin.comentarios') }}" class="d-flex gap-2">
+            <select name="status" class="form-select w-auto">
+                <option value="todos" {% if status_filter=='todos' %}selected{% endif %}>Todos os Comentários</option>
+                <option value="aprovados" {% if status_filter=='aprovados' %}selected{% endif %}>Publicados (Visíveis)
+                </option>
+                <option value="pendentes" {% if status_filter=='pendentes' %}selected{% endif %}>Ocultados (Moderação)
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary fw-bold">Filtrar</button>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Data/Hora</th>
+                        <th>Autor</th>
+                        <th>Status</th>
+                        <th>Conteúdo</th>
+                        <th class="text-end pe-4">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in pagination.items %}
+                    <tr>
+                        <td class="ps-4 text-muted small">{{ c.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td class="fw-bold">{{ c.user.username }}</td>
+                        <td>
+                            {% if c.aprovado %}
+                            <span class="badge bg-success">Público</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Oculto</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 300px;" title="{{ c.conteudo }}">
+                                {{ c.conteudo }}
+                            </div>
+                        </td>
+                        <td class="text-end pe-4">
+                            <form action="{{ url_for('blue_admin.toggle_comentario', id=c.id) }}" method="POST"
+                                class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                {% if c.aprovado %}
+                                <button type="submit" class="btn btn-sm btn-outline-warning"
+                                    title="Ocultar Comentário"><i class="bi bi-eye-slash"></i> Ocultar</button>
+                                {% else %}
+                                <button type="submit" class="btn btn-sm btn-success" title="Aprovar e Tornar Público"><i
+                                        class="bi bi-check2-circle"></i> Aprovar</button>
+                                {% endif %}
+                            </form>
+                            <form action="{{ url_for('blue_admin.excluir_comentario', id=c.id) }}" method="POST"
+                                class="d-inline"
+                                onsubmit="return confirm('Deseja excluir este comentário permanentemente?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Excluir"><i
+                                        class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-5">Nenhum comentário encontrado com este
+                            filtro.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% from '_macros.html' import render_pagination %}
+<div class="mt-4">
+    {{ render_pagination(pagination, 'blue_admin.comentarios', extra={'status': status_filter}) }}
+</div>
+{% endblock %}

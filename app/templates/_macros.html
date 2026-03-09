@@ -1,0 +1,96 @@
+{#
+  Macros Jinja2 reutilizáveis para o portal OPA.
+  Uso: {% from '_macros.html' import render_pagination, render_card_destaque, render_flash %}
+#}
+
+{# Paginação Bootstrap - extra: dict com parâmetros extras para url_for (ex: {'q': q}) #}
+{% macro render_pagination(pagination, endpoint, fragment='', extra=none) %}
+  {% if pagination.pages > 1 %}
+  <nav aria-label="Navegação de páginas" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+        <a class="page-link" href="{% if pagination.has_prev %}{{ url_for(endpoint, page=pagination.prev_num, **(extra or {})) }}{{ fragment }}{% else %}#{% endif %}">Anterior</a>
+      </li>
+      {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if p %}
+          <li class="page-item {% if p == pagination.page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for(endpoint, page=p, **(extra or {})) }}{{ fragment }}">{{ p }}</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+      <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+        <a class="page-link" href="{% if pagination.has_next %}{{ url_for(endpoint, page=pagination.next_num, **(extra or {})) }}{{ fragment }}{% else %}#{% endif %}">Próxima</a>
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+{% endmacro %}
+
+{# Card de destaque (com ou sem imagem) - cores temáticas #}
+{% macro render_card_destaque(titulo, descricao, categoria_slug, url='#', imagem_url=none) %}
+  <a href="{{ url }}" class="text-decoration-none d-block h-100">
+    <div class="card destaque-card card-{{ categoria_slug }} h-100">
+      <div class="destaque-top">
+        <span class="destaque-titulo">{{ titulo|upper }}</span>
+      </div>
+      <div class="destaque-thumb">
+        {% if imagem_url %}
+          <img src="{{ imagem_url }}" alt="{{ titulo }}">
+        {% else %}
+          <div class="destaque-thumb-placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+      <div class="destaque-body">
+        <p class="destaque-desc mb-0">{{ descricao }}</p>
+      </div>
+    </div>
+  </a>
+{% endmacro %}
+
+{# Card de notícia/post na listagem #}
+{% macro render_card_post(post) %}
+  <article class="card card-post card-{{ post.categoria_slug }} h-100">
+    {% if post.imagem_url %}
+    <a href="{{ url_for('blue_main.post', slug=post.slug) }}">
+      <img src="{{ post.imagem_url }}" class="card-img-top" alt="{{ post.titulo }}">
+    </a>
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">
+        <a href="{{ url_for('blue_main.post', slug=post.slug) }}" class="text-decoration-none text-dark">{{ post.titulo }}</a>
+      </h5>
+      <p class="card-text">{{ post.resumo or post.conteudo[:150]|striptags }}…</p>
+      <small class="text-muted">{{ post.created_at.strftime('%d %b. %Y') if post.created_at else '' }}</small>
+    </div>
+  </article>
+{% endmacro %}
+
+{# Mensagens flash (sucesso/erro) #}
+{% macro render_flash() %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endmacro %}
+
+{# Campo de formulário Flask-WTF com Bootstrap #}
+{% macro render_field(field) %}
+  <div class="mb-3">
+    {{ field.label(class="form-label") }}
+    {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+    {% if field.errors %}
+      <div class="invalid-feedback">
+        {% for error in field.errors %}{{ error }}{% if not loop.last %} {% endif %}{% endfor %}
+      </div>
+    {% endif %}
+    {% if field.description %}<div class="form-text">{{ field.description }}</div>{% endif %}
+  </div>
+{% endmacro %}

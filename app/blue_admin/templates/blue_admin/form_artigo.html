@@ -1,0 +1,52 @@
+{% extends "admin_base.html" %}
+
+{% block admin_content %}
+<div class="mb-4">
+    <h2 class="h3 text-gray-800">{% if artigo %}Editar Artigo{% else %}Novo Artigo{% endif %}</h2>
+    <p class="text-muted">Preencha as informações do artigo.</p>
+</div>
+
+<div class="card shadow border-0 col-lg-8">
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.titulo.label(class="form-label fw-bold") }}
+                {{ form.titulo(class="form-control") }}
+                {% for error in form.titulo.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.autor_nome.label(class="form-label fw-bold") }}
+                {{ form.autor_nome(class="form-control") }}
+                {% for error in form.autor_nome.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.resumo.label(class="form-label fw-bold") }}
+                {{ form.resumo(class="form-control", rows="3") }}
+                {% for error in form.resumo.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.conteudo.label(class="form-label fw-bold") }}
+                {{ form.conteudo(class="form-control", rows="6") }}
+                {% for error in form.conteudo.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-4 form-check">
+                {{ form.publicado(class="form-check-input") }}
+                {{ form.publicado.label(class="form-check-label fw-bold text-success") }}
+                <small class="form-text text-muted d-block">Se desmarcado, ficará como rascunho apenas no
+                    painel.</small>
+            </div>
+
+            <div class="d-flex gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+                <a href="{{ url_for('blue_admin.artigos') }}" class="btn btn-light">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

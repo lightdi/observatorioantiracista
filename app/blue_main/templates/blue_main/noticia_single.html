@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ noticia.titulo }} - OPA Notícias{% endblock %}
+
+{% block content %}
+<section class="py-5 min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.index') }}"
+                                class="text-decoration-none text-dark">Início</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('blue_main.noticias') }}"
+                                class="text-decoration-none text-warning fw-bold">Notícias</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ noticia.titulo[:30] }}...</li>
+                    </ol>
+                </nav>
+
+                <article>
+                    <div class="badge bg-warning text-dark mb-3 px-3 py-2 text-uppercase fw-bold rounded-pill"> <i
+                            class="bi bi-newspaper me-1"></i> Notícia OPA </div>
+                    <h1 class="fw-bold mb-4 lh-sm display-5">{{ noticia.titulo }}</h1>
+
+                    <div class="d-flex align-items-center mb-5 pb-3 border-bottom text-muted">
+                        <img src="{{ url_for('static', filename='img/hands_image.png') }}" alt="Logo"
+                            class="rounded-circle me-3 border" style="width: 45px; height: 45px; object-fit: cover;">
+                        <div>
+                            <div class="small fw-bold">Publicado por Observatório de Práticas Antirracistas</div>
+                            <div class="small"><i class="bi bi-calendar3 me-1"></i> {{ noticia.created_at.strftime('%d
+                                de %B, %Y às %H:%M') }}</div>
+                        </div>
+                    </div>
+
+                    <div class="article-content fs-5 lh-lg text-dark">
+                        {{ noticia.descricao|safe }}
+                    </div>
+
+                    {% set comentarios = noticia.comentarios %}
+                    {% set tipo = "noticia" %}
+                    {% set item_id = noticia.id %}
+                    {% include 'blue_main/_comentarios.html' %}
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

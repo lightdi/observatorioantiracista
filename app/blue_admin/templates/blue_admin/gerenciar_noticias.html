@@ -1,0 +1,54 @@
+{% extends "admin_base.html" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3 text-gray-800">Gerenciar Notícias</h2>
+    <a href="{{ url_for('blue_admin.nova_noticia') }}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-lg"></i> Nova Notícia
+    </a>
+</div>
+
+<div class="card shadow mb-4 border-0">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Título da Manchete</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in pagination.items %}
+                    <tr>
+                        <td class="fw-medium text-dark">{{ n.titulo }}</td>
+                        <td>
+                            {% if n.publicado %}
+                            <span class="badge bg-success-subtle text-success">Publicado</span>
+                            {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary">Oculto</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">{{ n.created_at.strftime('%d/%m/%Y') }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('blue_admin.editar_noticia', id=n.id) }}"
+                                class="btn btn-sm btn-outline-primary">Editar</a>
+                            <form action="{{ url_for('blue_admin.excluir_noticia', id=n.id) }}" method="POST"
+                                class="d-inline" onsubmit="return confirm('Excluir esta notícia permanentemente?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">Nenhuma notícia na base.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

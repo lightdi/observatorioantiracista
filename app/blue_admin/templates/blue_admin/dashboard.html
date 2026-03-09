@@ -1,0 +1,68 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard - OPA Admin{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="row mt-4 mb-4">
+  <div class="col-md-3">
+    <div class="card bg-light border-0 shadow-sm">
+      <div class="card-body text-center">
+        <h6 class="card-title text-uppercase text-muted fw-bold">Escolas</h4>
+          <p class="card-text display-6 text-primary">{{ total_escolas }}</p>
+          <a href="{{ url_for('blue_admin.escolas') }}" class="btn btn-sm btn-outline-primary">Ver Escolas</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-light border-0 shadow-sm">
+      <div class="card-body text-center">
+        <h6 class="card-title text-uppercase text-muted fw-bold">Práticas</h4>
+          <p class="card-text display-6 text-success">{{ total_praticas }}</p>
+          <a href="{{ url_for('blue_admin.praticas') }}" class="btn btn-sm btn-outline-success">Ver Práticas</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-light border-0 shadow-sm">
+      <div class="card-body text-center">
+        <h6 class="card-title text-uppercase text-muted fw-bold">Posts do Blog</h4>
+          <p class="card-text display-6 text-dark">{{ total_posts }}</p>
+          <a href="{{ url_for('blue_admin.posts') }}" class="btn btn-sm btn-outline-dark">Ver Posts</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-light border-0 shadow-sm">
+      <div class="card-body text-center">
+        <h6 class="card-title text-uppercase text-muted fw-bold">Denúncias</h4>
+          <p class="card-text display-6 text-danger">{{ total_denuncias }}</p>
+          <a href="{{ url_for('blue_admin.denuncias') }}" class="btn btn-sm btn-outline-danger">Ver Denúncias</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-4">
+  <h5>Denúncias recentes</h5>
+  {% if denuncias_recentes %}
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Status</th>
+        <th>Conteúdo (resumo)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in denuncias_recentes %}
+      <tr>
+        <td>{{ d.created_at.strftime('%d/%m/%Y %H:%M') if d.created_at else '-' }}</td>
+        <td><span class="badge bg-secondary">{{ d.status }}</span></td>
+        <td>{{ d.conteudo[:80] }}…</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="text-muted">Nenhuma denúncia recente.</p>
+  {% endif %}
+</div>
+{% endblock %}

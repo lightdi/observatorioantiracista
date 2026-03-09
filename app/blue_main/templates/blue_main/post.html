@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ post.titulo }} - OPA{% endblock %}
+{% block content %}
+<article class="container py-5">
+  <header class="mb-4">
+    <span class="badge bg-secondary">{{ post.categoria_nome }}</span>
+    <h1 class="mt-2">{{ post.titulo }}</h1>
+    <p class="text-muted small">
+      {{ post.created_at.strftime('%d/%m/%Y') if post.created_at else '' }}
+      {% if post.author %} — {{ post.author.username }}{% endif %}
+    </p>
+  </header>
+  {% if post.imagem_url %}
+  <img src="{{ post.imagem_url }}" class="img-fluid rounded mb-4" alt="{{ post.titulo }}">
+  {% endif %}
+  <div class="post-conteudo">
+    {{ post.conteudo | safe }}
+  </div>
+</article>
+{% endblock %}

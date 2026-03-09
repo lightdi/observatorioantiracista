@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Observatório OPA - Práticas Antirracistas{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light min-vh-100">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-dark display-5">Observatório de Práticas</h1>
+            <p class="lead text-muted">Conheça as iniciativas antirracistas aplicadas em escolas e instituições.</p>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm sticky-top" style="top: 2rem;">
+                    <div class="card-body">
+                        <h5 class="fw-bold border-bottom pb-2 mb-3">Filtros</h5>
+                        <form action="{{ url_for('blue_main.praticas') }}" method="GET">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-uppercase">Categoria Temática</label>
+                                <select name="categoria" class="form-select form-select-sm"
+                                    onchange="this.form.submit()">
+                                    <option value="">Todas as Categorias</option>
+                                    <option value="indigenas" {% if current_cat=='indigenas' %}selected{% endif %}>
+                                        Indígenas</option>
+                                    <option value="afro-brasileiros" {% if current_cat=='afro-brasileiros' %}selected{%
+                                        endif %}>Afro-Brasileiros</option>
+                                    <option value="ciganos-roma" {% if current_cat=='ciganos-roma' %}selected{% endif
+                                        %}>Ciganos/Roma</option>
+                                    <option value="cultura-resistencia" {% if current_cat=='cultura-resistencia'
+                                        %}selected{% endif %}>Cultura & Resistência</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="row g-4">
+                    {% for p in pagination.items %}
+                    <div class="col-md-6 d-flex">
+                        <div class="card shadow-sm border-0 h-100 rounded-4 overflow-hidden w-100">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <span class="badge bg-primary-subtle text-primary mb-3 align-self-start fw-bold">{{
+                                    p.categoria_nome }}</span>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ p.titulo }}</h5>
+                                <h6 class="text-secondary small fw-bold mb-3"><i class="bi bi-building me-1"></i> {{
+                                    p.escola.nome }}</h6>
+                                <p class="card-text text-muted mb-4 flex-grow-1">{{ p.descricao[:130] }}{% if
+                                    p.descricao|length > 130 %}...{% endif %}</p>
+                                <a href="{{ url_for('blue_main.pratica_single', id=p.id) }}"
+                                    class="btn btn-outline-primary w-100 fw-bold stretched-link">Ver Prática
+                                    Completa</a>
+                            </div>
+                            <div
+                                class="card-footer bg-white border-top-0 px-4 pb-3 pt-0 text-muted d-flex justify-content-between align-items-center">
+                                <small><i class="bi bi-geo-alt me-1"></i> {{ p.escola.cidade or 'Brasil' }} - {{
+                                    p.escola.estado or '' }}</small>
+                                <small><i class="bi bi-calendar3 me-1"></i> {{ p.created_at.strftime('%Y') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted fs-5">Nenhuma prática cadastrada nesta categoria ainda.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% from '_macros.html' import render_pagination %}
+                <div class="mt-5">
+                    {{ render_pagination(pagination, 'blue_main.praticas', categoria=current_cat) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,412 @@
+/**
+ * Estilos do Observatório de Práticas Antirracistas (OPA).
+ * Cores temáticas: Indígenas (verde), Afro-Brasileiros (preto), Ciganos/Roma (amarelo/laranja), Cultura & Resistência (vermelho).
+ */
+
+:root {
+  --opa-verde: #2d5016;
+  --opa-preto: #1a1a1a;
+  --opa-amarelo: #c9a227;
+  --opa-laranja: #b8860b;
+  --opa-vermelho: #8b0000;
+  --opa-branco: #fff;
+}
+
+/* Header e navegação */
+/* Top header (marca central + “faixas/mancha” à direita) */
+.opa-topheader {
+  position: relative;
+  background: #fff;
+  border-bottom: 1px solid #e9e9e9;
+  overflow: hidden;
+}
+
+.opa-topheader::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(90deg, #2d5016 0 35%, #8b0000 35% 100%);
+  opacity: 0.95;
+}
+
+.opa-topheader::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 160px;
+  height: 110px;
+  background:
+    radial-gradient(circle at 70% 35%, rgba(139,0,0,0.65) 0 40%, transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(139,0,0,0.35) 0 55%, transparent 60%);
+  filter: blur(.2px);
+  pointer-events: none;
+}
+
+.opa-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .9rem;
+  color: #111;
+  margin: 0 auto;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.opa-brand-logo {
+  height: auto;
+  width: 200px;
+  max-width: 100%;
+}
+
+.opa-brand-text {
+  line-height: 1.1;
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+}
+
+.opa-brand-title {
+  font-weight: bold;
+  font-size: 2.1rem;
+}
+
+.opa-brand-title.fw-bold {
+  font-size: 2.35rem;
+}
+
+.opa-brand-sub {
+  font-weight: 900;
+  color: var(--opa-vermelho);
+  font-size: 1.4rem;
+  font-style: italic;
+  margin-top: .3rem;
+}
+
+/* Responsividade do Topo */
+@media (max-width: 768px) {
+  .opa-brand {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .opa-brand-logo {
+    width: 150px;
+  }
+  
+  .opa-brand-title {
+    font-size: 1.5rem;
+  }
+  
+  .opa-brand-title.fw-bold {
+    font-size: 1.7rem;
+  }
+  
+  .opa-brand-sub {
+    font-size: 1.1rem;
+  }
+
+  .opa-topheader::after,
+  .opa-topheader::before {
+    display: none;
+  }
+}
+
+/* Navegação com ícones (referência) */
+.opa-nav {
+  background: #ffffff;
+}
+
+.opa-nav-icons {
+  gap: .25rem .75rem;
+}
+
+.opa-nav-link {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-decoration: none;
+  color: #111;
+  min-width: 92px;
+  padding: .6rem .5rem .55rem;
+  border-radius: 0;
+  border-left: 1px solid #e6e6e6;
+}
+
+.opa-nav-icons > .nav-item:first-child .opa-nav-link {
+  border-left: none;
+}
+
+.opa-nav-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2f2f2;
+  border: 1px solid #e5e5e5;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.opa-nav-text {
+  margin-top: .25rem;
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+.opa-nav-link.active {
+  background: var(--opa-vermelho);
+  color: #fff;
+}
+
+.opa-nav-link.active .opa-nav-icon {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+.opa-nav-link.active .opa-nav-text {
+  color: #fff;
+}
+
+/* Cores dos ícones (aproximação do recorte) */
+.opa-nav-link.nav-sobre .opa-nav-icon,
+.opa-nav-link.nav-observatorio .opa-nav-icon,
+.opa-nav-link.nav-praticas .opa-nav-icon {
+  background: #3f6b2a;
+  border-color: #2f541f;
+  color: #fff;
+}
+
+.opa-nav-link.nav-denuncias .opa-nav-icon {
+  background: #8b0000;
+  border-color: #6f0000;
+  color: #fff;
+}
+
+.opa-nav-link.nav-pesquisa .opa-nav-icon {
+  background: #6b2a2a;
+  border-color: #542020;
+  color: #fff;
+}
+
+/* Barra de busca (separada) */
+.opa-searchbar {
+  background: #ffffff;
+}
+
+.opa-search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .75rem;
+  align-items: center;
+}
+
+.opa-search-pill {
+  border: 1px solid #dcdcdc;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f7f7f7;
+  padding: 0 .75rem;
+}
+
+.opa-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: .55rem .25rem;
+  font-size: .95rem;
+  width: 100%;
+}
+
+.opa-search-btn {
+  border: none;
+  background: #f2b705;
+  color: #111;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: .55rem 1.8rem;
+  border-radius: 999px;
+}
+
+/* Hero / Banner */
+.hero-banner {
+  min-height: 260px;
+  color: var(--opa-branco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.75rem 1rem;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.hero-banner h1 {
+  font-size: clamp(1.25rem, 3.4vw, 1.85rem);
+  font-weight: 900;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.hero-box {
+  max-width: 900px;
+}
+
+.hero-sub {
+  font-size: 0.95rem;
+  opacity: 0.92;
+}
+
+.hero-btn {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+.hero-banner .btn-danger {
+  background-color: var(--opa-vermelho);
+  border-color: var(--opa-vermelho);
+}
+
+.hero-banner .btn-success {
+  background-color: var(--opa-verde);
+  border-color: var(--opa-verde);
+}
+
+/* Títulos de seção (como referência, em caixa alta) */
+.section-title h2 {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* Destaques – card com miniatura e faixa colorida */
+.destaque-card {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.destaque-top {
+  padding: .55rem .75rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.destaque-titulo {
+  font-size: .8rem;
+}
+
+.destaque-thumb {
+  background: #f1f1f1;
+  height: 120px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.destaque-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.destaque-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(0,0,0,0.05), transparent 45%),
+    radial-gradient(circle at 75% 40%, rgba(0,0,0,0.06), transparent 55%),
+    linear-gradient(135deg, #f4f4f4, #e9e9e9);
+}
+
+.destaque-body {
+  padding: .65rem .75rem .75rem;
+  background: #fff;
+}
+
+.destaque-desc {
+  font-size: .82rem;
+  color: #333;
+}
+
+/* Seções de destaque – cores temáticas */
+.destaque-card.card-indigenas .destaque-top { background-color: var(--opa-verde); }
+.destaque-card.card-afro-brasileiros .destaque-top { background-color: var(--opa-preto); }
+.destaque-card.card-ciganos-roma .destaque-top { background-color: var(--opa-laranja); }
+.destaque-card.card-cultura-resistencia .destaque-top { background-color: var(--opa-vermelho); }
+
+/* Cards de post (listagem) – bordas/acentos por categoria */
+.card-post.card-indigenas { border-top: 4px solid var(--opa-verde); }
+.card-post.card-afro-brasileiros { border-top: 4px solid var(--opa-preto); }
+.card-post.card-ciganos-roma { border-top: 4px solid var(--opa-amarelo); }
+.card-post.card-cultura-resistencia { border-top: 4px solid var(--opa-vermelho); }
+
+/* Áreas de atuação */
+.area-atuacao {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+}
+
+.area-atuacao .bi {
+  font-size: 2rem;
+  color: var(--opa-vermelho);
+}
+
+/* Box de denúncia lateral (home) */
+.denuncia-box .btn-danger {
+  background-color: var(--opa-vermelho);
+  border-color: var(--opa-vermelho);
+  font-weight: 900;
+  letter-spacing: .02em;
+}
+
+/* Footer */
+.site-footer a:hover {
+  text-decoration: underline;
+  color: var(--opa-branco) !important;
+}
+
+/* Painel administrativo */
+.admin-body {
+  background-color: #f8f9fa;
+}
+
+.admin-header a:hover {
+  color: #ddd !important;
+}
+
+.sidebar .nav-link {
+  color: #333;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+/* Utilitários de tema (para uso no Jinja2) */
+.bg-indigena { background-color: var(--opa-verde); }
+.bg-afro { background-color: var(--opa-preto); }
+.bg-roma { background-color: var(--opa-laranja); }
+.bg-resistencia { background-color: var(--opa-vermelho); }
+
+.text-indigena { color: var(--opa-verde); }
+.text-afro { color: var(--opa-preto); }
+.border-roma { border-color: var(--opa-amarelo); }

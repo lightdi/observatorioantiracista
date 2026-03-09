@@ -1,0 +1,58 @@
+<div class="comments-section mt-5 pt-4 border-top">
+    <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-chat-dots me-2"></i>Comentários</h4>
+
+    <div class="mb-5">
+        {% if current_user.is_authenticated %}
+        <div class="card bg-light border-0 rounded-4">
+            <div class="card-body p-4">
+                <form action="{{ url_for('blue_main.comentar') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="tipo" value="{{ tipo }}">
+                    <input type="hidden" name="item_id" value="{{ item_id }}">
+                    <div class="mb-3">
+                        <label for="conteudo" class="form-label fw-bold text-muted small text-uppercase">Participe da
+                            discussão</label>
+                        <textarea class="form-control bg-white" id="conteudo" name="conteudo" rows="3"
+                            placeholder="Escreva seu comentário..." required></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary fw-bold px-4">Comentar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-secondary text-center p-4 rounded-4" role="alert">
+            <p class="mb-2 text-muted fw-bold">Deseja participar da discussão?</p>
+            <a href="{{ url_for('blue_main.login') }}" class="btn btn-outline-primary btn-sm me-2 fw-bold">Fazer
+                Login</a>
+            <a href="{{ url_for('blue_main.registrar') }}" class="btn btn-primary btn-sm fw-bold">Criar Conta</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="comment-list">
+        {% set lista_comentarios =
+        comentarios.filter_by(aprovado=True).order_by(comentarios.property.mapper.class_.created_at.desc()).all() %}
+        {% for c in lista_comentarios %}
+        <div class="d-flex mb-4">
+            <div class="flex-shrink-0">
+                <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold fs-5 shadow-sm"
+                    style="width: 50px; height: 50px;">
+                    {{ c.user.username[0]|upper }}
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <div class="bg-light p-3 rounded-4 position-relative border-0 shadow-sm">
+                    <h6 class="fw-bold text-dark mb-1">{{ c.user.username }} {% if c.user.is_admin %}<span
+                            class="badge bg-danger ms-1">Admin</span>{% endif %}</h6>
+                    <small class="text-muted d-block mb-2">{{ c.created_at.strftime('%d/%m/%Y às %H:%M') }}</small>
+                    <p class="mb-0 text-secondary">{{ c.conteudo }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted fst-italic text-center py-4 bg-light rounded-4">Seja o primeiro a comentar.</p>
+        {% endfor %}
+    </div>
+</div>

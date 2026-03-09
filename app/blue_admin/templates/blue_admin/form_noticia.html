@@ -1,0 +1,38 @@
+{% extends "admin_base.html" %}
+
+{% block admin_content %}
+<div class="mb-4">
+    <h2 class="h3 text-gray-800">{% if noticia %}Editar Notícia{% else %}Nova Notícia{% endif %}</h2>
+    <p class="text-muted">Vincule ao boletim do portal OPA.</p>
+</div>
+
+<div class="card shadow border-0 col-lg-8">
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.titulo.label(class="form-label fw-bold") }}
+                {{ form.titulo(class="form-control", placeholder="Manchete principal") }}
+                {% for error in form.titulo.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.descricao.label(class="form-label fw-bold") }}
+                {{ form.descricao(class="form-control", rows="7") }}
+                {% for error in form.descricao.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+            </div>
+
+            <div class="mb-4 form-check">
+                {{ form.publicado(class="form-check-input") }}
+                {{ form.publicado.label(class="form-check-label fw-bold text-success") }}
+            </div>
+
+            <div class="d-flex gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+                <a href="{{ url_for('blue_admin.noticias') }}" class="btn btn-light">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

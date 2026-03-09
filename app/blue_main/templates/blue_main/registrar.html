@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastre-se - OPA{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-person-plus text-primary fs-1"></i>
+                            <h3 class="mt-2 fw-bold">Criar Conta</h3>
+                            <p class="text-muted small">Junte-se ao Observatório de Práticas Antirracistas e colabore.
+                            </p>
+                        </div>
+
+                        {% from '_macros.html' import render_flash %}
+                        {{ render_flash() }}
+
+                        <form method="post">
+                            {{ form.hidden_tag() }}
+
+                            <div class="mb-3">
+                                {{ form.username.label(class="form-label fw-bold small text-uppercase") }}
+                                {{ form.username(class="form-control form-control-lg bg-light", placeholder="Seu nome ou
+                                apelido") }}
+                                {% for error in form.username.errors %}<div class="text-danger small mt-1">{{ error }}
+                                </div>{% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.email.label(class="form-label fw-bold small text-uppercase") }}
+                                {{ form.email(class="form-control form-control-lg bg-light",
+                                placeholder="seu@email.com") }}
+                                {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}
+                                </div>{% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.password.label(class="form-label fw-bold small text-uppercase") }}
+                                {{ form.password(class="form-control form-control-lg bg-light", placeholder="Mínimo de 6
+                                caracteres") }}
+                                {% for error in form.password.errors %}<div class="text-danger small mt-1">{{ error }}
+                                </div>{% endfor %}
+                            </div>
+
+                            <div class="mb-4">
+                                {{ form.confirm_password.label(class="form-label fw-bold small text-uppercase") }}
+                                {{ form.confirm_password(class="form-control form-control-lg bg-light",
+                                placeholder="Repita a senha") }}
+                                {% for error in form.confirm_password.errors %}<div class="text-danger small mt-1">{{
+                                    error }}</div>{% endfor %}
+                            </div>
+
+                            {{ form.submit(class="btn btn-primary btn-lg w-100 fw-bold") }}
+
+                            <div class="text-center mt-4">
+                                <span class="text-muted small">Já possui uma conta? <a
+                                        href="{{ url_for('blue_main.login') }}"
+                                        class="text-decoration-none fw-bold">Faça Login</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
