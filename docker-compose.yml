@@ -30,7 +30,7 @@ services:
       - "traefik.http.routers.opa.tls.certresolver=le"
       - "traefik.http.middlewares.opa-stripprefix.stripprefix.prefixes=/opa"
       - "traefik.http.routers.opa.middlewares=opa-stripprefix@docker"
-      - "traefik.http.services.opa.loadbalancer.server.port=5000"
+      - "traefik.http.services.opa.loadbalancer.server.port=5005"
       - "traefik.docker.network=proxy"
 
 volumes:

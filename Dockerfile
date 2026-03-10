@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir -r requirements.txt gunicorn
 COPY . .
 
 # Expor a porta que a aplicação vai escutar
-EXPOSE 5000
+EXPOSE 5005
 
 # Script de entrada para performar migrações do banco (se houverem pendentes) e rodar
-CMD ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:5000 'app:create_app(\"production\")'"]
+CMD ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:5005 'app:create_app(\"production\")'"]
