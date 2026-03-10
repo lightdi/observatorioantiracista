@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  opa:
+    build: .
+    container_name: opa
+    restart: always
+
+    environment:
+      - FLASK_CONFIG=production
+      - FLASK_APP=run.py
+      - SECRET_KEY=${SECRET_KEY:-altere-em-producao-sua-secret-key}
+      - APPLICATION_ROOT=/opa
+      - DATABASE_URL=sqlite:////app/data/opa.db
+      - PROXY_FIX=1
+      - GENERIC_TIMEZONE=America/Fortaleza
+
+    volumes:
+      - opa_data:/app/data
+      - opa_uploads:/app/app/static/uploads
+
+    networks:
+      - proxy
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.opa.rule=Host(`integramaker.ifpb.edu.br`) && (PathPrefix(`/opa`) || Path(`/opa`))"
+      - "traefik.http.routers.opa.entrypoints=websecure"
+      - "traefik.http.routers.opa.tls=true"
+      - "traefik.http.routers.opa.tls.certresolver=le"
+      - "traefik.http.middlewares.opa-stripprefix.stripprefix.prefixes=/opa"
+      - "traefik.http.routers.opa.middlewares=opa-stripprefix@docker"
+      - "traefik.http.services.opa.loadbalancer.server.port=5000"
+      - "traefik.docker.network=proxy"
+
+volumes:
+  opa_data:
+  opa_uploads:
+
+
+networks:
+  proxy:
+    external: true

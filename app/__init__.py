@@ -15,6 +15,14 @@ def create_app(config_name=None):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
+    # Configuração para proxy reverso (Traefik) e hospedagem em subdiretório
+    if os.environ.get("PROXY_FIX"):
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
+    if os.environ.get("APPLICATION_ROOT"):
+        app.config["APPLICATION_ROOT"] = os.environ.get("APPLICATION_ROOT")
+
     # Inicializar extensões
     db.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
