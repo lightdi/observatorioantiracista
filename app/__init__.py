@@ -3,6 +3,7 @@ Application Factory do Observatório de Práticas Antirracistas (OPA).
 Cria a aplicação Flask, registra Blueprints e extensões.
 """
 from flask import Flask
+import os
 from config import config
 from app.extensões import db, login_manager, migrate
 from app.models import User
